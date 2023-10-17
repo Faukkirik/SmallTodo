@@ -9,11 +9,12 @@ export type TaskPropsType = {
 type TodolistPropsType = {
     title: string
     task: TaskPropsType[]
-    removeTask: (id: string) => void
+    removeTask: (taskId: string, todolistId: string) => void
     filteredTasks: (value: FilteredPropsTaskType) => void
     addTask: (title: string) => void
     changeStatus: (taskId: string, isDone: boolean) => void
     filter: FilteredPropsTaskType
+    todolistId: string
 }
 export const Todolists = (props: TodolistPropsType) => {
     const [taskTitle, setTaskTitle] = useState<string>('')
@@ -39,8 +40,8 @@ export const Todolists = (props: TodolistPropsType) => {
     const onAllClickHandler = () => props.filteredTasks('all')
     const onActiveClickHandler = () => props.filteredTasks('active')
     const onCompletedClickHandler = () => props.filteredTasks('completed')
-    const onClickRemoveHandlers = (id: string) => {
-        props.removeTask(id)
+    const onClickRemoveHandlers = (taskId: string, todolistId: string) => {
+        props.removeTask(taskId, todolistId)
     }
     return (
         <div>
@@ -68,7 +69,7 @@ export const Todolists = (props: TodolistPropsType) => {
                                 onChange={(e)=>{props.changeStatus(el.id, e.currentTarget.checked)}}
                             /> <span>{el.title}</span>
                             <button
-                                onClick={() => onClickRemoveHandlers(el.id)}
+                                onClick={() => onClickRemoveHandlers(el.id,props.todolistId)}
                             >x
                             </button>
                         </li>
