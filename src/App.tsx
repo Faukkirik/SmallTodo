@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import './App.css';
-import {TaskPropsType, Todolists} from "./components/Todolists";
+import {Todolists} from "./components/Todolists";
 import {v1} from "uuid";
 
 
@@ -32,21 +32,21 @@ function App() {
         ]
     })
     const removeTask = (taskId: string, todolistId: string) => {
-        setTask(prevTask => ({
-            ...prevTask,
-            [todolistId]: prevTask[todolistId].filter(el => el.id !== taskId)
-        }));
+        setTask({...task, [todolistId]: task[todolistId].filter(el => el.id !== taskId)})
     };
-    const filteredTasks = (value: FilteredPropsTaskType) => {
-        setFilter(value)
+    const removeTodolist = (todolistId: string) => {
+        setTodolists(todolists.filter(el => el.id !== todolistId))
+        delete task[todolistId]
+        setTask({...task})
     }
-    const addTask = (title: string) => {
-        setTask([
-            {id: v1(), title: title, isDone: false},
-            ...task])
+    const filteredTasks = (value: FilteredPropsTaskType, todolistId: string) => {
+        setTodolists(todolists.map(el => el.id === todolistId ? {...el, filter: value} : {...el}))
     }
-    const changeStatus = (taskId: string, isDone: boolean) => {
-        setTask(task.map(el => el.id === taskId ? {...el, isDone} : el));
+    const addTask = (title: string, todolistId: string) => {
+        setTask({...task, [todolistId]: [ {id: v1(), title: title, isDone: false},...task[todolistId]]})
+    }
+    const changeStatus = (taskId: string, isDone: boolean, todolistId: string) => {
+        setTask({...task, [todolistId]: task[todolistId].map(el => el.id === taskId ? {...el, isDone: isDone} : el)})
     }
 
     return (
@@ -66,6 +66,7 @@ function App() {
                         title={el.title}
                         task={taskForTodolist}
                         removeTask={removeTask}
+                        removeTodolist={removeTodolist}
                         filteredTasks={filteredTasks}
                         addTask={addTask}
                         changeStatus={changeStatus}
