@@ -1,6 +1,7 @@
 import React from "react";
 import {FilteredPropsTaskType} from "../App";
 import {AddItemForm} from "./AddItemForm";
+import {EditableSpan} from "./EditableSpan";
 
 export type TaskPropsType = {
     id: string
@@ -17,6 +18,8 @@ type TodolistPropsType = {
     filter: FilteredPropsTaskType
     todolistId: string
     removeTodolist: (todolistId: string) => void
+    changeTaskTitle: (newTitle: string, todolistId: string, taskId: string) => void
+    changeTodolistTitle: (newTitle: string, todolistId: string) => void
 }
 export const Todolists = (props: TodolistPropsType) => {
     const onAllClickHandler = () => props.filteredTasks('all', props.todolistId)
@@ -31,9 +34,16 @@ export const Todolists = (props: TodolistPropsType) => {
     const addTaskHandler = (title: string) => {
         props.addTask(title, props.todolistId)
     }
+    const changeTaskTitle = (newTitle: string, taskId: string) => {
+        props.changeTaskTitle(newTitle, props.todolistId, taskId)
+    }
+    const changeTodolistTitle = (newTitle: string) => {
+        props.changeTodolistTitle(newTitle, props.todolistId)
+    }
     return (
         <div>
-            <h3>{props.title}
+            <h3>
+                <EditableSpan title={props.title} changeTitle={changeTodolistTitle}/>
                 <button onClick={onClickRemoveTodolstHandler}>x</button>
             </h3>
             <AddItemForm addItem={addTaskHandler}/>
@@ -48,7 +58,8 @@ export const Todolists = (props: TodolistPropsType) => {
                                 type="checkbox"
                                 checked={el.isDone}
                                 onChange={(e)=>{props.changeStatus(el.id, e.currentTarget.checked, props.todolistId)}}
-                            /> <span>{el.title}</span>
+                            />
+                            <EditableSpan title={el.title} changeTitle={(newTitle)=>changeTaskTitle(newTitle, el.id)} />
                             <button
                                 onClick={() => onClickRemoveHandlers(el.id,props.todolistId)}
                             >x

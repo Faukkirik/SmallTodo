@@ -47,20 +47,26 @@ function App() {
         setTodolists(todolists.map(el => el.id === todolistId ? {...el, filter: value} : {...el}))
     }
     const addTask = (title: string, todolistId: string) => {
-        setTask({...task, [todolistId]: [ {id: v1(), title: title, isDone: false},...task[todolistId]]})
+        setTask({...task, [todolistId]: [{id: v1(), title: title, isDone: false}, ...task[todolistId]]})
     }
     const changeStatus = (taskId: string, isDone: boolean, todolistId: string) => {
         setTask({...task, [todolistId]: task[todolistId].map(el => el.id === taskId ? {...el, isDone: isDone} : el)})
     }
     const addTodolist = (title: string) => {
         const todolist: TodolistType = {id: v1(), title: title, filter: "all"}
-        setTodolists([todolist,...todolists])
-        setTask({...task, [todolist.id]: [] })
+        setTodolists([todolist, ...todolists])
+        setTask({...task, [todolist.id]: []})
+    }
+    const changeTaskTitle = (newTitle: string, todolistId: string, taskId: string) => {
+        setTask({...task, [todolistId]: task[todolistId].map(el => el.id === taskId ? {...el, title: newTitle} : el)})
+    }
+    const changeTodolistTitle = (newTitle: string, todolistId: string) => {
+        setTodolists(todolists.map(el => el.id === todolistId ? {...el, title: newTitle} : el))
     }
     return (
         <div className="App">
             <AddItemForm addItem={addTodolist}/>
-            { todolists.map(el => {
+            {todolists.map(el => {
                 let taskForTodolist = task[el.id]
                 if (el.filter === 'active') {
                     taskForTodolist = task[el.id].filter(el => el.isDone)
@@ -80,6 +86,8 @@ function App() {
                         addTask={addTask}
                         changeStatus={changeStatus}
                         filter={el.filter}
+                        changeTaskTitle={changeTaskTitle}
+                        changeTodolistTitle={changeTodolistTitle}
                     />
                 )
             })
