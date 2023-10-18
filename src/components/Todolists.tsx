@@ -44,13 +44,13 @@ export const Todolists = (props: TodolistPropsType) => {
     const onClickRemoveHandlers = (taskId: string, todolistId: string) => {
         props.removeTask(taskId, todolistId)
     }
-    const onClickRemoveTodolstHandler = (todolistId: string) => {
-        props.removeTodolist(todolistId)
+    const onClickRemoveTodolstHandler = () => {
+        props.removeTodolist(props.todolistId)
     }
     return (
         <div>
             <h3>{props.title}
-                <button onClick={()=>{props.removeTodolist(props.todolistId)}}>x</button>
+                <button onClick={onClickRemoveTodolstHandler}>x</button>
             </h3>
             <div>
                 <input
