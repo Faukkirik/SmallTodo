@@ -9,12 +9,12 @@ import {Menu} from "@mui/icons-material";
 
 export type FilteredPropsTaskType = 'all' | 'active' | 'completed'
 
-type TodolistType = {
+export type TodolistType = {
     id: string
     title: string
     filter: FilteredPropsTaskType
 }
-type TasksStateType = {
+export type TasksStateType = {
     [key: string]: TaskPropsType[]
 }
 
