@@ -1,5 +1,6 @@
-import {FilteredPropsTaskType, TodolistType} from "../../App";
+import {FilteredPropsTaskType, TodolistType} from "../../AppWithRedux";
 import {v1} from "uuid";
+
 
 export type ActionType =
     RemoveTodolistActionType |
@@ -11,7 +12,10 @@ export type RemoveTodolistActionType = ReturnType<typeof removeTodolistAC>
 export type AddTodolistActionType = ReturnType<typeof addTodolistAC>
 export type ChangeTodolistTitleActionType = ReturnType<typeof changeTodolistTitleAC>
 export type ChangeTodolistFilterActionType = ReturnType<typeof changeTodolistFilterAC>
-export const todolistReducer = (state: TodolistType[], action: ActionType): TodolistType[] => {
+
+const initialState: TodolistType[] = []
+
+export const todolistReducer = (state: TodolistType[] = initialState, action: ActionType): TodolistType[] => {
     switch (action.type) {
         case 'REMOVE-TODOLIST': {
             return state.filter(el => el.id !== action.todolistId)
@@ -27,7 +31,7 @@ export const todolistReducer = (state: TodolistType[], action: ActionType): Todo
             return state.map(el => el.id === action.id ? {...el, filter: action.filter} : {...el})
         }
         default: {
-            return {...state}
+            return state
         }
     }
 }
