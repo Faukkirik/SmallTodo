@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import './App.css';
 import {TaskPropsType, Todolists} from "./components/Todolists";
 import {AddItemForm} from "./components/AddItemForm";
@@ -27,18 +27,19 @@ export type TasksStateType = {
 function App() {
     const dispatch = useDispatch()
     const todolists = useSelector<RootStateType, TodolistType[]>(state => state.todolists)
-    const removeTodolist = (todolistId: string) => {
+    const removeTodolist = useCallback ((todolistId: string) => {
         dispatch(removeTodolistAC(todolistId))
-    }
-    const filteredTasks = (value: FilteredPropsTaskType, todolistId: string) => {
+    },[dispatch])
+    const filteredTasks = useCallback ((value: FilteredPropsTaskType, todolistId: string) => {
         dispatch(changeTodolistFilterAC(value, todolistId))
-    }
-    const addTodolist = (title: string) => {
+    },[dispatch])
+    const addTodolist = useCallback ((title: string) => {
         dispatch(addTodolistAC(title))
-    }
-    const changeTodolistTitle = (newTitle: string, todolistId: string) => {
+    },[dispatch])
+    const changeTodolistTitle = useCallback ((newTitle: string, todolistId: string) => {
         dispatch(changeTodolistTitleAC(newTitle, todolistId))
-    }
+    },[dispatch])
+    //console.log('App render')
     return (
         <div className="App">
             <AppBar position={'static'}>
